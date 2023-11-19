@@ -1,13 +1,14 @@
-1. Название задания:
+## 1. Название задания:
 Vagrant-стенд для обновления ядра и создания образа системы
 
-2. Текст задания:
+## 2. Текст задания:
 1) Обновить ядро ОС из репозитория ELRepo
 2) Создать Vagrant box c помощью Packer
 3) Загрузить Vagrant box в Vagrant Cloud
 
-3. Описание команд и их вывод:
-root@ubuntu:~# vagrant box add generic/centos8s
+## 3. Описание команд и их вывод:
+```
+root@ubuntu:~$ vagrant box add generic/centos8s
 ==> box: Loading metadata for box 'generic/centos8s'
     box: URL: https://vagrantcloud.com/api/v2/vagrant/generic/centos8s
 This box can work with multiple providers! The providers that it
@@ -25,14 +26,14 @@ Enter your choice: 4
     box: Downloading: https://vagrantcloud.com/generic/boxes/centos8s/versions/4.3.6/providers/virtualbox/amd64/vagrant.box
     box: Calculating and comparing box checksum...
 ==> box: Successfully added box 'generic/centos8s' (v4.3.6) for 'virtualbox (amd64)'!
-root@ubuntu:~# cd /opt/vm/
-root@ubuntu:/opt/vm# vagrant init
+root@ubuntu:~$ cd /opt/vm/
+root@ubuntu:/opt/vm$ vagrant init
 A `Vagrantfile` has been placed in this directory. You are now
 ready to `vagrant up` your first virtual environment! Please read
 the comments in the Vagrantfile as well as documentation on
 `vagrantup.com` for more information on using Vagrant.
-root@ubuntu:/opt/vm# vim Vagrantfile 
-root@ubuntu:/opt/vm# vagrant up
+root@ubuntu:/opt/vm$ vim Vagrantfile 
+root@ubuntu:/opt/vm$ vagrant up
 Bringing machine 'kernel-update' up with 'virtualbox' provider...
 ==> kernel-update: Importing base box 'generic/centos8s'...
 ==> kernel-update: Matching MAC address for NAT networking...
@@ -59,11 +60,11 @@ Bringing machine 'kernel-update' up with 'virtualbox' provider...
 ==> kernel-update: Machine booted and ready!
 ==> kernel-update: Checking for guest additions in VM...
 ==> kernel-update: Setting hostname...
-root@ubuntu:/opt/vm# vagrant ssh
+root@ubuntu:/opt/vm$ vagrant ssh
 [vagrant@kernel-update ~]$ sudo -i
-[root@kernel-update ~]# uname -r
+[root@kernel-update ~]$ uname -r
 4.18.0-519.el8.x86_64
-[root@kernel-update ~]# yum install -y https://www.elrepo.org/elrepo-release-8.el8.elrepo.noarch.rpm
+[root@kernel-update ~]$ yum install -y https://www.elrepo.org/elrepo-release-8.el8.elrepo.noarch.rpm
 CentOS Stream 8 - AppStream                                                                                                                          3.3 MB/s |  34 MB     00:10    
 CentOS Stream 8 - BaseOS                                                                                                                             3.0 MB/s |  53 MB     00:17    
 CentOS Stream 8 - Extras                                                                                                                             8.7 kB/s |  18 kB     00:02    
@@ -98,7 +99,7 @@ Installed:
   elrepo-release-8.3-1.el8.elrepo.noarch                                                                                                                                             
 
 Complete!
-[root@kernel-update ~]# yum --enablerepo elrepo-kernel install kernel-ml -y
+[root@kernel-update ~]$ yum --enablerepo elrepo-kernel install kernel-ml -y
 ELRepo.org Community Enterprise Linux Repository - el8                                                                                                80 kB/s | 248 kB     00:03    
 ELRepo.org Community Enterprise Linux Kernel Repository - el8                                                                                        686 kB/s | 2.1 MB     00:03    
 Dependencies resolved.
@@ -153,13 +154,13 @@ Installed:
   kernel-ml-6.6.1-1.el8.elrepo.x86_64                    kernel-ml-core-6.6.1-1.el8.elrepo.x86_64                    kernel-ml-modules-6.6.1-1.el8.elrepo.x86_64                   
 
 Complete!
-[root@kernel-update ~]# grub2-mkconfig -o /boot/grub2/grub.cfg
+[root@kernel-update ~]$ grub2-mkconfig -o /boot/grub2/grub.cfg
 Generating grub configuration file ...
 done
-[root@kernel-update ~]# grub2-set-default 0
-[root@kernel-update ~]# reboot
-[root@kernel-update ~]# uname -r
+[root@kernel-update ~]$ grub2-set-default 0
+[root@kernel-update ~]$ reboot
+[root@kernel-update ~]$ uname -r
 6.6.1-1.el8.elrepo.x86_64
-
-4. Особенности проектирования и реализации решения
+```
+## 4. Особенности проектирования и реализации решения
 Изучив методичку, пришла к выводу, что не имеет большого смысла использование packer для решения задачи, если можно просто добавить исполнение того же скрипта в Vagrantfile. Поэтому здесь присутствует именно такое решение.
